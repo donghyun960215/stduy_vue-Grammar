@@ -1,38 +1,29 @@
 <template>
-  <h1 @click="changeMessage">
-    {{ msg }}
+  <h1
+    :style="[fontStyle, backgroundColor]"
+    @click="changestyle">
+    Hello?!
   </h1>
-  <h1>{{ reversedMessage }}</h1>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      msg: 'Hello?'
-    }
-  },
-  computed: {
-    reversedMessage() {
-      return this.msg.split('').reverse().join('')
-    }
-  },
-  watch: {
-    msg() {
-      console.log('msg: ',this.msg)
-      console.log('reversedMessage: ',this.reversedMessage)
+      fontStyle: {
+      color: 'orange',
+      fontSize: '30px'
+      },
+      backgroundColor: {
+        backgroundColor: 'black'
+      }
     }
   },
   methods: {
-    changeMessage() {
-      this.msg = 'Good!'
+    changestyle() {
+      this.fontStyle.color = 'red',
+      this.fontStyle.fontSize = '50px'
     }
   }
 }
 </script>
-
-<style>
-h1{
-  font-size: 60px;
-}
-</style>

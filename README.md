@@ -261,3 +261,107 @@ export default {
 3. 감시가 되고 있다가 실제로 변경이 일어나니까 msg()메소드를 실행하게 된다.
 계산된 값 또한 감시가 가능하다.
 ```
+
+## 클래스와 스타일 바인딩
+### 클래스 바인딩
+```html
+<template>
+  <h1
+    :class="{active: isActive}"
+    @click="activate">
+    Hello?!({{ isActive }})
+  </h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isActive: false
+    }
+  },
+  methods: {
+    activate() {
+      this.isActive = true
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .active {
+    color: red;
+    font-size: 60px;
+    font-weight: bold;
+  }
+</style>
+```
+```plaintext
+h1태그의 클래스로 activ라는 이름의 class를 추가 하려는데, isActive가 false면 추가가 안되고
+true면 추가가 된다. 이런 표기법을 클래스 바인딩이라고 한다.
+```
+### 스타일 바인딩
+```html
+<template>
+  <h1
+    :style="{color: color, fontSize: fontSize}"
+    @click="changestyle">
+    Hello?!
+  </h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      color: 'orange',
+      fontSize: '30px'
+    }
+  },
+  methods: {
+    changestyle() {
+      this.color = 'red',
+      this.fontSize = '50px'
+    }
+  }
+}
+</script>
+```
+```plaintext
+위 와 같이 style를 데이터처럼 활용을 해서 스타일 바인딩을 할 수 있다.
+```
+```html
+<template>
+  <h1
+    :style="[fontStyle, backgroundColor]"
+    @click="changestyle">
+    Hello?!
+  </h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      fontStyle: {
+      color: 'orange',
+      fontSize: '30px'
+      },
+      backgroundColor: {
+        backgroundColor: 'black'
+      }
+    }
+  },
+  methods: {
+    changestyle() {
+      this.fontStyle.color = 'red',
+      this.fontStyle.fontSize = '50px'
+    }
+  }
+}
+</script>
+```
+```plaintext
+적용할 스타일이 여러개라면 위 와 같이 객체로 묶어서 사용도 가능하다.
+여러개의 객체 데이터를 연결할 떄는 배열데이터로 연결해서 사용한다.
+```
