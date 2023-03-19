@@ -365,3 +365,135 @@ export default {
 적용할 스타일이 여러개라면 위 와 같이 객체로 묶어서 사용도 가능하다.
 여러개의 객체 데이터를 연결할 떄는 배열데이터로 연결해서 사용한다.
 ```
+
+## 조건부 렌더링
+### v-if
+```html
+<template>
+  <button @click="handler">
+    Click me!
+  </button>
+  <h1 v-if="isShow">
+    Hello?!
+  </h1>
+  <h1 v-else-if="count > 3">
+    3번 이상 클릭 했습니다.
+  </h1>
+  <h1 v-else>
+    Good~
+  </h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isShow: true,
+      count: 0
+    }
+  },
+  methods: {
+    handler() {
+      this.isShow = !this.isShow
+      this.count += 1
+    }
+  }
+}
+</script>
+```
+```plaintext
+흔히 알고 있는 if 문이라고 생각하면 된다. 
+v-if="isShow" 의 isShow 값이 true일 때 화면에 출력이 되고 v-else는 출력이 안된다.
+v-if="isShow" 의 isShow 값이 false일 때 회면에 출력이 안 되고 v-else는 출력이 된다.
+버튼의 핸들러를 추가시켜 값을 변환 시키게 할 수 있다.
+```
+
+### v-show
+```html
+<template>
+  <button @click="handler">
+    Click me!
+  </button>
+  <h1 v-show="isShow">
+    Hello?!
+  </h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isShow: false,
+      count: 0
+    }
+  },
+  methods: {
+    handler() {
+      this.isShow = !this.isShow
+      this.count += 1
+    }
+  }
+}
+</script>
+```
+```plaintext
+v-if와 비슷하다. 차이점은 v-show가 있는 엘리먼트는 항상 렌더링 되고 DOM에 남아있다는 점입니다. 
+v-show는 단순히 엘리먼트에 display CSS 속성을 토글합니다.
+무언가를 자주 전환 해야 한다면 v-show를 사용하는게 좋고 런타임 시 조건이 변경되지 않는다면 v-if를 사용하는 게 더 낫습니다.
+```
+
+## 리스트 렌더링
+### v-for
+```html
+<template>
+  <ul>
+    <li
+      v-for="fruit in fruits"
+      :key="fruit">
+      {{ fruit }}
+    </li>
+  </ul>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      fruits: ['Apple', 'Banana', 'Cherry']
+    }
+  }
+}
+</script>
+```
+```plaintext
+fruits 의 배열 데이터를 fruit의 넣고 배열의 갯수만큼 반복해서 출력한다.
+key값은 fruit의 데이터가 고유하다라는 뜻이다.
+```
+
+## 이벤트 핸들링
+### v-on: click="methodName"
+```html
+<template>
+  <button @click="handlerA(), handlerB()">
+    Click me!
+  </button>
+</template>
+
+<script> 
+export default {
+  methods: {
+    handlerA() {
+      console.log('A')
+    },
+    handlerB() {
+      console.log('B')
+    }
+  }
+}
+</script>
+```
+```plaintext
+말 그대로 클릭 이벤트 이다. 문법은 v-on: click="methodName" 을 @click="methodName" 로 줄여서 사용이 가능하다.
+클릭시 사용할 메소드가 한개 이상이라면 소괄호를 열고 닫아서 작성을 해줘야한다. 
+만약 한개라면 소괄호는 작성을 안해도 된다.
+```
