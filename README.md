@@ -288,7 +288,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<styl scoped>
   .active {
     color: red;
     font-size: 60px;
@@ -496,4 +496,205 @@ export default {
 말 그대로 클릭 이벤트 이다. 문법은 v-on: click="methodName" 을 @click="methodName" 로 줄여서 사용이 가능하다.
 클릭시 사용할 메소드가 한개 이상이라면 소괄호를 열고 닫아서 작성을 해줘야한다. 
 만약 한개라면 소괄호는 작성을 안해도 된다.
+```
+
+## 이벤트 핸들러 수식어
+
+### prevent
+```html
+<template>
+  <a
+    href="https://naver.com"
+    target="_blank"
+    @click.prevent="handler">
+    NAVER
+  </a>
+</template>
+
+<script>
+export default {
+  methods: {
+    handler() {
+      console.log('ABC!!')
+    }
+  }
+}
+</script>
+```
+```plaintext
+기본 기능을 작동하는걸 멈추게한다. A태그같은 경우 주소 이동이 기본 기능이지만,
+prevent라는 수식어를 달아주면 기본기능을 막아준다.
+```
+### once
+```html
+<template>
+  <a
+    href="https://naver.com"
+    target="_blank"
+    @click.once="handler">
+    NAVER
+  </a>
+</template>
+
+<script>
+export default {
+  methods: {
+    handler() {
+      console.log('ABC!!')
+    }
+  }
+}
+</script>
+```
+```plaintext
+지금 상황에서 링크를 누르면 여러면 작동을 하지만 methods는 단 한번만 작동을 한다.
+once수식어는 특정이벤트가 발생했을 때 메소드를 단 한번만 실행하도록 해준다.
+```
+
+### 수식어체이닝
+```html
+<template>
+  <a
+    href="https://naver.com"
+    target="_blank"
+    @click.prevent.once="handler">
+    NAVER
+  </a>
+</template>
+
+<script>
+export default {
+  methods: {
+    handler() {
+      console.log('ABC!!')
+    }
+  }
+}
+</script>
+```
+```plaintext
+수식어는 체이닝 방법으로 여러개를 붙혀서 사용도 가능하다.
+위와 같이 수식어를 작성하게 되면 A의 기본 기능을 막는 prevent는 단 한번만 작동하게 된다.
+그 후 다시 클릭시 링크이동이 된다.
+```
+
+### stop
+```html
+<template>
+  <div
+    class="parent"
+    @click="handlerA">
+    <div
+      class="child"
+      @click="handlerB"></div>
+  <!--@click.stop="handlerB" -->
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handlerA() {
+      console.log('A')
+    },
+    handlerB() {
+      console.log('B')
+    }
+  }
+}
+</script>
+```
+```plaintext
+위 상황에서  .child를 클릭을 해도 이벤트 버블링으로 인해 .parent도 같이 클릭이 된다.
+그래서 console를 보게 되면 B가 찍히고 그리고 A도 찍히는걸 볼 수 있다.
+그걸 방지하기 위해서 이벤트핸들러 수식어로 stop를 작성하면 된다.
+```
+
+### capture (이벤트 캡처링)
+```html
+<template>
+  <div
+    class="parent"
+    @click="handlerA">
+<!--@click.capture="handlerA" -->
+    <div
+      class="child"
+      @click="handlerB"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handlerA() {
+      console.log('A')
+    },
+    handlerB() {
+      console.log('B')
+    }
+  }
+}
+</script>
+```
+```plaintext
+위 상황에서 .child를 클릭하게 되면 console에서는 B가 찍히고 그 다음으로 A가 찍히게 된다.
+.praent 부분에 capture수식어를 작성하게 되면
+.child를 클릭했을 때 A가 먼저 찍히고 그 다음 B가 찍히게 된다.
+```
+```html
+<template>
+  <div
+    class="parent"
+    @click.capture.stop="handlerA">
+    <div
+      class="child"
+      @click="handlerB"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handlerA() {
+      console.log('A')
+    },
+    handlerB() {
+      console.log('B')
+    }
+  }
+}
+</script>
+```
+```plaintext
+수식어 체닝을을 통해 .capture.stop 이렇게 수식어를 작성하게 된다면,
+console에는 A만 찍히게 된다.
+```
+
+### self
+```html
+<template>
+  <div
+    class="parent"
+    @click="handlerA">
+<!--@click.self="handlerA" -->
+    <div
+      class="child"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handlerA() {
+      console.log('A')
+    }
+  }
+}
+</script>
+```
+```plaintext
+위 상황에서  .child를 클릭을 해도 이벤트버블링 때문에 console에는 A가 찍히게 된다.
+그걸 방지하고자 할 때 .parent 부분에 self수식어를 작성하게 되면 
+.child를 클릭을 해도 console에는 아무것도 찍히지 않는다.
+self수식어는 자기 자신의 영역을 정확하게 클릭을 했을 때만 동작을 하게 만들어준다.
 ```
