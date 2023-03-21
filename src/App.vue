@@ -1,38 +1,23 @@
 <template>
-  <div
-    class="parent"
-    @click.self="handlerA">
-    <div
-      class="child"></div>
-  </div>
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    :value="msg"
+    @input="handler" />
 </template>
 
 <script>
-export default {
-  methods: {
-    handlerA(event) {
-      console.log(event.target)
-      console.log(event.currentTarget)
-      console.log('A')
+  export default {
+    data() {
+      return {
+        msg: 'Hello world!'
+      }
     },
-    handlerB() {
-      console.log('B')
+    methods: {
+      handler(event) {
+        console.log(event.target.value)
+        this.msg = event.target.value
+      }
     }
   }
-}
 </script>
-
-<style scoped lang="scss">
-.parent {
-  background-color: royalblue;
-  width: 200px;
-  height: 100px;
-  margin: 10px;
-  padding: 10px;
-  .child {
-    background-color: orange;
-    width: 100px;
-    height: 100px;
-  }
-}
-</style>

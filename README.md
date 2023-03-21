@@ -698,3 +698,129 @@ export default {
 .child를 클릭을 해도 console에는 아무것도 찍히지 않는다.
 self수식어는 자기 자신의 영역을 정확하게 클릭을 했을 때만 동작을 하게 만들어준다.
 ```
+
+### @wheel.passive
+```html
+<template>
+  <div
+    class="parent"
+    @wheel.passive="handler">
+    <div class="child"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handler(event) {
+      for(let i = 0; i < 10000; i +=1){
+        console.log(event)
+      }
+    }
+  }
+}
+</script>
+```
+```plaintext
+@wheel 이벤트를 사용하면 휠이 움직일 때마다 매소드가 실행되는걸 볼 수 있다. 
+일부러 부화를 주기위해 for문을 사용하게 되면 휠이 움직일때마다 10000번 반복하는 부화가 생긴다.
+그렇게 되면 스크롤이 버벅거리면서 움직이는걸 볼 수 있다.
+그 때 사용하는게 .passive이다.
+.passive 기본적인 로직의 처리와 화면의 위아래 스크롤을 완전히 독립시켜줄 수 있다.
+```
+
+## 이벤트 핸들링 - 키 수식어
+### keydown
+```html
+<template>
+  <input
+    type="text"
+    @keydown.enter="handler" />
+</template>
+
+<script>
+export default {
+  methods: {
+    handler() {
+        console.log('Enter!!')
+    }
+  }
+}
+</script>
+```
+```plaintext
+@keydown.enter 이렇게 작성을 하고 inputbox에 여러가지 타이핑을 한 뒤
+Enter를 누르게되면 메소드가 실행하면서 콘솔창에는 Enter!!가 출력되게 된다.
+
+만약 .enter이 아니라 다른 문자로 작동을 싶으면 뒤에 부분을 원하는 문자로 입력해주고
+타이핑 마지막에 그 문자를 입력해주면된다.
+ex) keydown.a 라고 입력하면 마지막 문자는 a로 입력해주면 똑같이 메소드가 작동한다.
+
+체이닝 사용도 가능하다.
+@keydown.ctrl.a 라고 입력을 하면 마지막에 ctrl를 누른 상태에서 a를 누루면 똑같이 메소드가 자동한다.
+```
+
+## 폼 입력 바인딩
+### 단방향 데이터 바인딩
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    :value="msg" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 'Hello world!'
+      }
+    }
+  }
+</script>
+```
+```plaintext
+msg의 Hello world라는 데이터를 input요소의 value라는 속성에 연결을 했고
+h1요소에 컨텐트라는 요소에 연결을 해서 화면에 출력하고 있다.
+그러면 데이터 방향이 한쪽의 방향으로만 화살표가 그려진다. 그래서 input의 입력값을 변경을 해도
+h1d의 값은 변함이 없다.
+단방향 데이터 바인딩이라고 한다.
+```
+
+### 양방향 데이터 바인딩
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    :value="msg"
+    @input="handler" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 'Hello world!'
+      }
+    },
+    methods: {
+      handler(event) {
+        console.log(event.target.value)
+        this.msg = event.target.value
+      }
+    }
+  }
+</script>
+```
+```plaintext
+데이터의 흐름
+1. msg는 Hello world!가 있는 데이터이고 그것이 input요소의 msg h1요소의 msg로 출력이 되고 있다.
+2.input요소를 통해서 사용자가 어떠한 데이터를 입력했을 떄 
+  @input이라는 이벤트가 작동이되면서 그 떄 handler라는 메소드가 실행이 된다.
+3.handler라는 메소드는 그 내부로 입력된 데이터의 이벤트 객체를 받아서 
+  event.target.value 를 다시 msg라는 데이터에다가 할당을 한다.
+4.그러면 msg라는 데이터가 갱신이 됐기때문에 그 갱신된 데이터가 다시 msg가 연결되어 있는 각각의 부분의 다시 반영이되서
+  반응성을 통해서 h1의 값이 바뀌게 된다.
+```
