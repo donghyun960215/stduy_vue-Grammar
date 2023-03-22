@@ -1,22 +1,24 @@
 <template>
   <h1>{{ msg }}</h1>
-  <input
+  <!-- <input
     type="text"
     :value="msg"
-    @input="handler" />
+    @change="msg = $event.target.value" /> -->
+  <input
+    type="text"
+    v-model.trim="msg" />
 </template>
 
 <script>
   export default {
     data() {
       return {
-        msg: 'Hello world!'
+        msg: 'Hello world'
       }
     },
-    methods: {
-      handler(event) {
-        console.log(event.target.value)
-        this.msg = event.target.value
+    watch: {
+      msg(){
+        console.log(this.msg)
       }
     }
   }

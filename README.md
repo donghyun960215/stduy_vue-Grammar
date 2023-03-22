@@ -824,3 +824,132 @@ h1d의 값은 변함이 없다.
 4.그러면 msg라는 데이터가 갱신이 됐기때문에 그 갱신된 데이터가 다시 msg가 연결되어 있는 각각의 부분의 다시 반영이되서
   반응성을 통해서 h1의 값이 바뀌게 된다.
 ```
+### 양방향 간소화
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    v-model="msg" />
+  <!-- :value="msg"
+    @input="msg = $event.target.value" -->
+  <h1>{{ checkde }}</h1>
+  <input
+    type="checkbox"
+    v-model="checkde" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 'Hello world!',
+        checkde: false
+      }
+    }
+  }
+</script>
+```
+```plaintext
+메소드를 활용하는 방식이 아닌 @input="msg = $event.target.value" /> 와 같이
+인라인 방식으로 작성을 한다.
+더 간소화 하는 방법으로는 v-model="msg" 를 사용한다.
+checkde 부분도 양방향으로 설정을 하고 기본값을 false로 지정을 한 뒤
+화면에서 체크를 누르면 true가 나오고 체크를 해제하면 false가 나오게 된다.
+/////주의사항/////
+한글을 입력할 때에 v-model="msg"를 입력하게 되면 처음 한글자가 늦게 반응해서 입력이 안된다.
+그래서 한글을 사용 할 때는 @input="msg = $event.target.value"를 사용해야한다.
+```
+
+## v-model 수식어
+
+### @change
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    :value="msg"
+    @change="msg = $event.target.value" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 'Hello world!'
+      }
+    }
+  }
+</script>
+```
+```plaintext
+@change 수식어를 사용하게되면 사용자가 입력을 하고 있는 동안에는 값이 갱신되지않고
+입력을 하고 포커싱이 나가게 되면 그 때 최종적으로 갱신이 된다.
+v-model의 사용 방식은 수식어로 lazy를 붙혀준다.
+ex)v-model.lazy="msg"
+```
+
+### .number
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <!-- <input
+    type="text"
+    :value="msg"
+    @change="msg = $event.target.value" /> -->
+  <input
+    type="text"
+    v-model.number="msg" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 123
+      }
+    },
+    watch: {
+      msg(){
+        console.log(typeof this.msg)
+      }
+    }
+  }
+</script>
+```
+```plaintext
+숫자를 입력해서 양방향이 끝난 뒤에 타입을 보게되면 string로 변경이 되어있다.
+그러므로 숫자를 사용 할 때에는 수식어를.number를 붙혀준다.
+```
+### .trim
+```html
+<template>
+  <h1>{{ msg }}</h1>
+  <!-- <input
+    type="text"
+    :value="msg"
+    @change="msg = $event.target.value" /> -->
+  <input
+    type="text"
+    v-model.trim="msg" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        msg: 'Hello world'
+      }
+    },
+    watch: {
+      msg(){
+        console.log(this.msg)
+      }
+    }
+  }
+</script>
+```
+```plaintext
+trim은 앞뒤의 공백을 제거하다. 메소드로 사용을 안하고 수식어로 .trim을 입력해주면 공백제거가 된다.
+```
